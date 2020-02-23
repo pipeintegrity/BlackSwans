@@ -1,0 +1,56 @@
+---
+title: "Catastrophic Risk"
+author: "Joel Anderson"
+date: "May 17, 2019"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dpi = 300)
+```
+
+## Catastrophic Risk
+While history is not always a good predictor of the future but often times that is all is available to mine for data.  In the case for pipeline risk PHMSA publishes all pipeline incident data.  An incident is in brief terms an accidental release from a pipeline that includes any of the following: Greater than $50,000 in property damage, an injury or fatality.  Then if you were to take that data and convert the injuries and fatalities to dollar values using an appropriate multiplier and come up with a total consequence of failure (CoF) your data would closely resemble the familiar bell-shaped curve of a Gaussian distribution as shown in Figure 1.
+  
+```{r import data, fig.cap="Figure 1: CoF Data Density Curve"}
+library(dplyr)
+library(ggplot2)
+#library(readr)
+library(MASS)
+library(ggpubr)
+library(data.table)
+library(car)
+setwd("E:/Documents/Analysis/catastrophic")
+#setwd("~/PPIM2019")
+incidents <- fread("all_combine.csv")
+incidents <- incidents[is.na(Year)==FALSE]
+#incidents <- incidents[1:2716,] #Drop 40 NAs at the end
+#incidents <- incidents %>% filter(is.na(Year)==FALSE)
+incidents[,inflation_adjstd :=incidents$TOTAL_COST_IN84*2.49] #Per CPI calculator adjusted 1984 to 2019
+incidents[, CoF:=inflation_adjstd+INJURE*0.33*10e6+FATAL*10e6]
+incidents <- incidents[is.na(CoF)==FALSE]
+
+ggplot(incidents, aes(CoF))+geom_density(fill='#FF3030', col='black', alpha=0.8)+theme_bw()+xlim(0,5e6)#+scale_x_log10()
+
+```
+  
+The density curve of Figure 1 shows that the Consequences are highly concentrated on the left side of the plot with tails extending out for large distances.  Actually the scale of the plot in Figure 1 is truncated for purposes of scale.  Data that extends through multiple magnitudes of order often benefit from being plotted on a log scale which is shown in Figure 2. 
+  
+```{r CoF Data on a log scale, fig.cap="Figure 2: CoF Density Curve - log scale"}
+
+ggplot(incidents, aes(CoF))+geom_density(fill='#FF3030',alpha=0.8, col='black')+theme_bw()+scale_x_log10()
+```
+
+If the data shown in Figure 2 does follow the well-known distribution then there are several inferences that can be made about the prediction of future data and the likelihood of seeing certain values.  In this case the data appears to follows a Gaussian distribution fairly close on a log scale until the values reach the values to the further right.  That in lies the problem in the field of risk is that the majority of the data will lie in a predictable range near the lower end of the scale but the incidents that should keep one up at night are the ones far right which are far rarer but the consequences can be hundreds or thousands of times larger than the average.  In the CoF data in Figure 1 the median incident is around \$170,000 and the maximum is over \$1 billion a difference of over 6,000 times the median.  This is common in any application of risk, not just pipeline risk.  For instance take the following data of earthquake insurance loss ratios (claims paid divided by premiums received).  If you were an insurance actuarial analyst and were looking at the previous 23 years of data in 1993 and trying to determine the risk to the company for the upcoming year what would you recommend to your management?  The highest ratio seen in the historical data is one year where it exceeded 100 and the next highest is about 50 with the majority less than 10.  A person unaware the nature of catastrophic risk might say that the probable maximum loss would be around 100.
+  
+```{r insurance losses}
+#setwd("~/PPIM2019")
+insurance <- fread("earthquake_loss.csv")
+ggplot(insurance[-24], aes(year, loss_ratio))+geom_bar(stat = "identity", fill='steelblue2',col='black')+theme_bw()+scale_y_continuous(breaks=seq(0,140,by=20))
+#ggplot(insurance[-24], aes(loss_ratio))+geom_histogram( fill='steelblue2',col='black')+theme_bw()+scale_y_continuous(breaks = seq(0,10, by=2))
+```
+  
+The conclusion of this story is that in 1994 the Northridge Earthquake hit with a loss ratio of 2273, almost 700 times the median loss ratio of the previous 23 years.  This same story can be repeated any number of times with different metrics including, stock market losses, flooding and many others.  While this is a relatively new concept for pipeline oeprators, this is a well studied problem in insurance and hydrology as well as many other applied sciences.  
+  
+The problem with classic statistics is that it is governed by 
+

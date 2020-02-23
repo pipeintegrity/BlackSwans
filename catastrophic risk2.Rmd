@@ -1,0 +1,55 @@
+---
+title: "Catastrophic Risk"
+author: "Joel Anderson"
+date: "May 17, 2019"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dpi = 300)
+```
+
+## Catastrophic Risk
+While history is not always a good predictor of the future but often times that is all is available to mine for data.  In the case of pipeline risk PHMSA publishes all pipeline incident data.  An incident is in brief terms an accidental release from a pipeline that includes any of the following: Greater than $50,000 in property damage, an injury or fatality.  Then if you were to take that data and scale the injuries and fatalities to dollar values using an appropriate multiplier and come up with a total consequence of failure (CoF), your data would closely resemble the familiar bell-shaped curve of a Gaussian distribution as shown in Figure 1.
+  
+```{r import data, fig.cap="Figure 1: CoF Data Density Curve"}
+library(dplyr)
+library(ggplot2)
+#library(readr)
+library(MASS)
+library(ggpubr)
+library(data.table)
+library(car)
+#setwd("D:/Documents/Analysis/catastrophic")
+#setwd("~/PPIM2019")
+incidents <- fread("all_combine.csv")
+incidents <- incidents[is.na(Year)==FALSE]
+#incidents <- incidents[1:2716,] #Drop 40 NAs at the end
+#incidents <- incidents %>% filter(is.na(Year)==FALSE)
+incidents[,inflation_adjstd :=incidents$TOTAL_COST_IN84*2.49] #Per CPI calculator adjusted 1984 to 2019
+incidents[, CoF:=inflation_adjstd+INJURE*0.33*10e6+FATAL*10e6]
+incidents <- incidents[is.na(CoF)==FALSE]
+
+ggplot(incidents, aes(CoF))+geom_density(fill='#FF3030', col='black', alpha=0.8)+theme_bw()+xlim(0,5e6)#+scale_x_log10()
+
+```
+  
+The density curve of Figure 1 shows that the Consequences are highly concentrated on the left side of the plot with tails extending out for large distances.  Actually the scale of the plot in Figure 1 is truncated for purposes of scale.  Data that extends through multiple magnitudes of order often benefit from being plotted on a log scale which is shown in Figure 2. 
+  
+```{r CoF Data on a log scale, fig.cap="Figure 2: CoF Density Curve - log scale"}
+
+ggplot(incidents, aes(CoF))+geom_density(fill='#FF3030',alpha=0.8, col='black')+theme_bw()+scale_x_log10()+labs(title = "Consequence of Failure", x="CoF ($) - Log Scale", y=NULL)+theme(axis.text.y = element_blank())
+```
+
+If the data shown in Figure 2 does follow the well-known distribution then there are several inferences that can be made about the prediction of future data and the likelihood of seeing certain values.  In this case the data appears to follows a Gaussian distribution fairly close on a log scale until the values reach the values to the further right.  This is none as the "tails risk" the amount of risk that lies in the tails of the distribution where the data is far scarcer and the consequences much larger. That in lies the problem in the field of risk is that the majority of the data will lie in a predictable range near the lower end of the scale but the incidents that should keep one up at night are the ones far right which are far rarer but the consequences can be hundreds or thousands of times larger than the average.  In the CoF data in Figure 1 the median incident is around \$170,000 and the maximum is over \$1 billion a difference of over 6,000 times the median.  This is common in any application of risk, not just pipeline risk.  For instance take the following data of earthquake insurance loss ratios (claims paid divided by premiums received).  If you were an insurance actuarial analyst and were looking at the previous 23 years of data in 1993 and trying to determine the risk to the company for the upcoming year what would you recommend to your management?  The highest ratio seen in the historical data is one year where it exceeded 100 and the next highest is about 50 with the majority less than 10.  A person unaware the nature of catastrophic risk might say that the probable maximum loss would be around 100 and the expected loss less than 20.
+  
+```{r insurance losses}
+#setwd("~/PPIM2019")
+insurance <- fread("earthquake_loss.csv")
+ggplot(insurance[-24], aes(year, loss_ratio))+geom_bar(stat = "identity", fill='steelblue2',col='black')+theme_bw()+scale_y_continuous(breaks=seq(0,140,by=20))+labs(title = "Insurance Loss Ratios by Year",subtitle = "1971 - 1993", x="Year", Y="Loss Ratio")
+#ggplot(insurance[-24], aes(loss_ratio))+geom_histogram( fill='steelblue2',col='black')+theme_bw()+scale_y_continuous(breaks = seq(0,10, by=2))
+```
+  
+The conclusion of this story is that in 1994 the Northridge Earthquake hit with a loss ratio of 2273, almost 700 times the median loss ratio of the previous twenty-three years.  Even if someone was to assume worst case was the mean plus three standard deviations, which under a normal distribution covers 99.7% of the data they would have still been off by a factor of more than 20.  It can be seen from this insurance example that catastrophic risk does not follow Gaussian statistical norms.  The Gaussian distribution is very common in any application where the effects are additive.  So common that it often referred to as the Normal distribution.  This works very well in applications where the deviations from the mean are small.  The classic example of this is people's height.  The average height of men is about 5' 10" with a standard deviation of 4".  It would be very rare to come across someone that is more than 2 or 3 standard deviations from that mean.  We don't have giants or Lilliputians walking around!  But in the field of risk, a Black Swan can be a hundred or a thousand times the mean. This is because the variables that drive risk are multiplicative rather than additive.  These means that the results have the ability to increase exponentially.  
+  
+If a normal distribution was fit to something like the incident CoF data it would have the appearance of being a good fit through the middle of the curve with some outliers at the higher end.  But if you were to magnify this tails area you would see that there are far more of these extreme events than would be expected based on a normal distribution. This why the normal distribution would be suitable model for such events that phenomena based on sums and averages but a really poor model for Black Swans where the effects are multiplied by magnitudes of order between the mean and the extremes. Traditional statistics would predict the likelihood of something of the magnitude of these consequences would be effectively zero yet there are several examples in the 33 years of data. In fact the data count departs from the predicted count by a factor of 10 at the higher CoF values.

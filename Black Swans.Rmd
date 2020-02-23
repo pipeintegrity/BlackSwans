@@ -1,0 +1,56 @@
+---
+title: "Dancing with the Swans"
+author: "Joel Anderson"
+date: "2/23/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+## Black Swans
+The term "Black Swan" orginates from the belief that all swans were white because those were the only ones observed by westerners.  This belief continued until 1697 when black swans were found in Austalia, rewriting accepted zoology in one swipe.  The term becomes a metaphor for unprecedented and unexpected events and eventually the title of a best selling book by Nasim Taleb.  
+  
+There are several charachteristics that all Black Swans have in common. The first is that it comes as a surprise to the observer.  It is an outlier outside the realm of regular expectations because nothing in the past points to its existence.  Typically this is because the time frame of which data is available is too short to contain one of these Black Swans due to their rarity.  
+  
+The second factor that all Black Swans have in common is that they are rationalized after the fact, making them "predictiable" in retrospect in the observers mind.  Explainations are created to convince the observer that if they had only looked, the evidence was there the whole time.  Even though there is nothing in the past that points to it.
+  
+The third charachteristic is that it has extreme impact beyond anything ever observed previously.  The consequences can be up to thousands of times a "typical" incident.
+  
+## Examples of Black Swans
+It is well known that casinos spend huge sums of money on survellience and employee training to prevent losses due to cheating at the gambling tables.  Yet the biggest loss to a casino came not from card cheats but from the loss of headline entertainment act when Roy Horn of Siegfried and Roy was attacked on stage by one of the tigers in their act.  The total economic loss is estimated at \$100 million dollars when the show closed permenantly with no immediate replacment.  The Cainos were building defenses against the most common threat (gambling cheats) but were completely blind to the possibility that the loss of this one act impact the caisno for years to come and in ways they hadn't even thought of.
+
+## Catastrophic Risk
+While history is not always a good predictor of the future but often times that is all is available to mine for data.  In the case of pipeline risk PHMSA publishes all pipeline incident data.  An incident is in brief terms an accidental release from a pipeline that includes any of the following: Greater than $50,000 in property damage, an injury or fatality.  Then if you were to take that data and scale the injuries and fatalities to dollar values using an appropriate multiplier and come up with a total consequence of failure (CoF), the data would have a histogram as shown in Figure 1.
+  
+```{r import data, fig.cap="Figure 1: CoF Data Density Curve"}
+library(dplyr)
+library(ggplot2)
+#library(readr)
+library(MASS)
+library(ggpubr)
+library(data.table)
+library(car)
+#setwd("D:/Documents/Analysis/catastrophic")
+#setwd("~/PPIM2019")
+incidents <- fread("all_combine.csv")
+incidents <- incidents[is.na(Year)==FALSE]
+#incidents <- incidents[1:2716,] #Drop 40 NAs at the end
+#incidents <- incidents %>% filter(is.na(Year)==FALSE)
+incidents[,inflation_adjstd :=incidents$TOTAL_COST_IN84*2.49] #Per CPI calculator adjusted 1984 to 2019
+incidents[, CoF:=inflation_adjstd+INJURE*0.33*10e6+FATAL*10e6]
+incidents <- incidents[is.na(CoF)==FALSE]
+
+incidents %>% filter(CoF>5e4) %>% ggplot(aes(CoF))+geom_histogram(fill='#FF3030', col='black', alpha=0.8)+theme_bw()+geom_rug(col='blue')+xlim(0,1e7)+ylim(0,700)
+
+```
+
+That in lies the problem in the field of risk is that the majority of the data will lie in a predictable range near the lower end of the scale but the incidents that should keep one up at night are the ones far right which are far rarer but the consequences can be hundreds or thousands of times larger than the average.  In the CoF data in Figure 1 the median incident is around \$170,000 and the maximum is over \$1 billion a difference of over 6,000 times the median.  This is common in any application of risk, not just pipeline risk.  For instance take the following data of earthquake insurance loss ratios (claims paid divided by premiums received).  If you were an insurance actuarial analyst and were looking at the previous 23 years of data in 1993 and trying to determine the risk to the company for the upcoming year what would you recommend to your management?  The highest ratio seen in the historical data is one year where it exceeded 100 and the next highest is about 50 with the majority less than 10.  A person unaware the nature of catastrophic risk might say that the probable maximum loss would be around 100 and the expected loss less than 20.
+  
+```{r insurance losses}
+#setwd("~/PPIM2019")
+insurance <- fread("earthquake_loss.csv")
+ggplot(insurance[-24], aes(year, loss_ratio))+geom_bar(stat = "identity", fill='steelblue2',col='black')+theme_bw()+scale_y_continuous(breaks=seq(0,140,by=20))+labs(title = "Insurance Loss Ratios by Year",subtitle = "1971 - 1993", x="Year", Y="Loss Ratio")
+#ggplot(insurance[-24], aes(loss_ratio))+geom_histogram( fill='steelblue2',col='black')+theme_bw()+scale_y_continuous(breaks = seq(0,10, by=2))
+```
