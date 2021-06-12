@@ -36,7 +36,6 @@ library(patchwork)
 library(tidyverse)
 library(extRemes)
 
-
 ```
 
 
@@ -121,8 +120,9 @@ The conclusion of this is that in 1994 the Northridge Earthquake hit with a loss
   
 Consequently, even analysis methods like a Monte Carlo even though they account for stochastic nature of different variables, are better at predicting average behavior of something than the extremes. This is because the sampling distributions used are more suited to modeling the "typical" rather than the extremes, leading to "typical" results.
 
-# Catastrophic Risk  
-While history is not always a good predictor of the future, that is all is available to mine for data.  In the case of pipeline risk, PHMSA publishes incident data for jurisdictional pipelines.  An incident is an accidental release from a pipeline that includes any of the following: Greater than \$50,000 in property damage, an injury or fatality.  Then if you were to take that data and scale the injuries and fatalities to dollar values using an appropriate multiplier to arrive at a total consequence of failure (CoF), the data would have a histogram as shown in Figure \@ref(fig:incident-plot).  Note: the range of data for the histogram extends out to $10^9$ on the logarithmic axis but for the purposes of scale it is truncated at $10^8$.
+## Catastrophic Risk  
+While history is not always a good predictor of the future, that is all is available to mine for data. Caveat: the shorter your window of observation the more likely it will be exceeded and in a shorter amount of time.  In the case of pipeline risk, PHMSA publishes incident data for jurisdictional pipelines.  An incident is an accidental release from a pipeline that includes any of the following: Greater than \$50,000 in property damage, an injury or fatality.  Then if you were to take that data and scale the injuries and fatalities to dollar values using an appropriate multiplier to arrive at a total consequence of failure (CoF), the data would have a histogram as shown in Figure 1.  Note: the range of data for the histogram extends out to $10^9$ on the logarithmic axis but for the purposes of scale it is truncated at $10^8$.
+
   
 ```{r import data}
 
