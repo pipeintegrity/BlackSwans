@@ -1,6 +1,6 @@
 ---
 title: "The Bird of Catastrophy"  
-author: "CERM"  
+author: "Joel Anderson"  
 date: "`r format(Sys.time(), '%d %B, %Y')`" 
 
 output: bookdown::word_document2
@@ -11,7 +11,7 @@ output: bookdown::word_document2
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dpi = 600)
 ```
 
-# Black Swans
+# Black Swans {-}
 The term "Black Swan" originates from the belief that all swans were white because those were the only ones observed by westerners.  This belief continued until 1697 when black swans were found in Australia, rewriting accepted science in one swipe.  The term becomes a metaphor for unprecedented and unexpected events and eventually the title of a best selling book by Nasim Taleb.  
   
 There are several characteristics that all Black Swans have in common. The first is that it comes as a surprise to the observer.  It is an outlier outside the realm of regular expectations because nothing in the past points to its existence.  Typically this is because the time frame of which data is available is too short to contain one of these Black Swans due to their rarity.  
@@ -20,14 +20,18 @@ The second factor that all Black Swans have in common is that they are rationali
   
 The third characteristic is that it has extreme impact beyond anything ever observed previously.  The consequences can be thousands of times a "typical" incident.  The three ingredients to a Black Swan are the unpredictability, consequences not seen in any historical record and rationalization after the fact. 
   
-## How bad can bad be
-In any risk analysis the question always at hand is, how bad can it be?  The response is reflexively, how bad has it been in the past. The problem with that approach is that Black Swans are a rare bird and your window of observations might be too short to have experienced one in your data set. In addition, when people are asked about the magnitude of risk for something in which hard data is sparse or non-existent they will base their estimates based on personal experience which is most likely skewed toward the lower quartile. People are more likely to give credibility to stories than they are abstract statistics since it is easier to mentally process.
+## How bad can bad be {-}
+In any risk analysis the question always at hand is, how bad can it be?  The response is reflexively, how bad has it been in the past? The problem with that approach is that Black Swans are a rare bird and your window of observations might be too short to have experienced one in your data set. In addition, when people are asked about the magnitude of risk for something in which hard data is sparse or non-existent they will base their estimates based on personal experience which is most likely skewed toward the lower quartile or based their estimate on, "what they heard".  Since people are more likely to give credibility to stories than they are abstract statistics since it is easier to mentally process.
   
-# Black Swans and Statistics  
-Most of the traditional statistics serve the user well if the phenomena of interest never ventures far from the average. It can be seen in the following examples that catastrophic risk does not adhere to such norms. Some distributions are so common in many everyday applications where the effects are additive and the deviations from the mean are small. The classic example of this is height of people.  The average height of men is about 5' 10" with a standard deviation of 4".  It would be very rare to come across someone that is more than 2 or 3 standard deviations from that mean.  We don't have giants or Lilliputians walking around!  But in the field of risk, a Black Swan can be a hundred or a thousand times the mean. This is because the variables that drive risk are multiplicative rather than additive therefore the results have the ability to increase exponentially. That is why it is very dangerous to make assumptions that make something computationally convenient (e.g. normally distributed or taking an average) because Black Swans live in the wild, out on the tails of the distribution where traditional statistics would predict the likelihood of something of that magnitude is essentially zero.  The first characteristic of Black Swans is that they are a rare bird, your period of time that you have data for might be too short to have ever seen one.  If your entire data set contains nothing but ordinary "White Swans" it does not prove the lack of existence of Black Swans but a single Black Swan is sufficient to disprove that theory of its non-existence and one Black Swan can put a company out of business in one swipe.
+# Black Swans and Statistics  {-}
+Most of the traditional statistics serve the user well if the phenomena of interest never ventures far from the average. It can be seen in the following examples that catastrophic risk does not adhere to such norms. Some distributions are so common in many everyday applications where the effects are additive and the deviations from the mean are small it's refered to as, "normal distributions". The classic example of this is height of people.  The average height of men is about 5' 10" with a standard deviation of 4".  It would be very rare to come across someone that is more than 2 or 3 standard deviations from that mean.  We don't have giants or Lilliputians walking around!  
+  
+But in the field of risk, a Black Swan can be a hundred or a thousand times the mean. This is because the variables that drive risk are multiplicative rather than additive therefore the results have the ability to increase exponentially. That is why it is very dangerous to make assumptions that make something computationally convenient (e.g. normally distributed or taking an average) because Black Swans live in the wild, out on the tails of the distribution where traditional statistics would predict the likelihood of something of that magnitude is essentially zero.  The first characteristic of Black Swans is that they are a rare bird, your period of time that you have data for might be too short to have ever seen one.  If your entire data set contains nothing but ordinary "White Swans" it does not prove the lack of existence of Black Swans but a single Black Swan is sufficient to disprove that theory of its non-existence and one Black Swan can put a company out of business in one swipe. Sage advice was given by Emil Gumbel when he said, "It is impossible for the improbable to never happen."
 
-# The Perils of the Normal Distribution  
-The results of a simulation are shown in \@ref(fig:gumbel) which demonstrates why the normal distribution is misleading in the area of rare risks. The simulation makes 1,000 random draws from a standard normal distribution (zero mean and unit standard deviation) and repeats this process 1,000 times (1 million samples total). With each iteration it calculates the mean and maximum value, plotted as blue and red markers respectively. The bottom plot shows that the probability density of the maximum values converge to a Gumbel distribution known as a Type I extreme value distribution which will be discussed later in this paper. But more importantly, it can be seen that even though the samples are drawn at random, the average of the samples never get far from the mean (about $\pm$ 0.1 standard deviations) of the population and the extremes *start* at about 3 standard deviations from the mean. If the sample data was examined it would be seen that only about one-tenth of one percent (0.1%) ever exceeded 3 standard deviations. The implications of this are that if an engineer is working with a set of limited observations and assumes the entire range of data is normally distributed, the magnitude and frequency of an extreme event will be grossly underestimated and the observation data have a low probability of even containing anything beyond two standard deviations much less three. But this also demonstrates that extreme events follow their own distribution separate from the rest of the population that can be exploited to the designers benefit.
+# The Perils of the Normal Distribution  {-}
+The results of a simulation are shown in Figure \@ref(fig:gumbel) which demonstrates why the normal distribution is misleading in the area of rare risks. The simulation makes 1,000 random draws from a standard normal distribution (zero mean and unit standard deviation) and repeats this process 1,000 times (1 million samples total). With each iteration of samples it calculates the mean and maximum value, plotted as blue and red markers respectively. The bottom plot shows that the probability density of the maximum values converge to a Gumbel distribution known as a Type I extreme value distribution which will be discussed later in this paper.  
+  
+But more importantly, it can be seen that even though the samples are drawn at random, the average of the samples never get far from the mean (about $\pm$ 0.1 standard deviations) of the population and the extremes *start* at about 3 standard deviations from the mean. If the sample data was examined it would be seen that only about one-tenth of one percent (0.1%) ever exceeded 3 standard deviations. The implications of this are that if an engineer is working with a set of limited observations and assumes the entire range of data is normally distributed, the magnitude and frequency of an extreme event will be grossly underestimated and the observation data have a low probability of even containing anything beyond two standard deviations much less three. But this also demonstrates that extreme events follow their own distribution separate from the rest of the population that can be exploited to the designer's benefit.
 
 ```{r libraries}
 library(locfit)
@@ -35,11 +39,12 @@ library(logspline)
 library(patchwork)
 library(tidyverse)
 library(extRemes)
+theme_set(theme_bw(14,"serif"))
 
 ```
 
 
-```{r gumbel, fig.cap = "Simulation Results", fig.height=5, fig.width=6.5, dpi=300, cache=TRUE}
+```{r gumbel, fig.cap = "Simulation Results", fig.height=3.25, fig.width=6.5, dpi=300, cache=TRUE}
 
 #Tidy verse way ---------
 
@@ -93,14 +98,14 @@ norm_dist/gumbel
 
 ```
 
-It can be said that statistics and probability is a statement about the future based on observations in the past. But risk is not a constant thing. People constantly alter their behavior based on observed or perceived dangers therefor altering future outcomes. Making past observations possibly moot if it based on an assumed pattern of behavior.  Donald Rumsfeld, former  Secretary of Defense talked about the three types of "knowns".  The first is the "known knowns", things that you know for certain.  The second is the "known unknowns", these are the things that you know you don't know but since you are aware of them they could be acquired through time, effort or other resources.  The third and most consequential is the "unknown unknowns", these are the things that you don't know you don't know - you are completely unaware of them in any way. This is the origins of Black Swans.  For if the factors that could lead to a Black Swan were known, the end user would have made adjustments to their behavior to account for them.  But instead the average person careens ahead attempting to mitigate and prevent the directly perceived more common risk factors that are seen on a regular basis, in the meantime just out of sight could be an event that end their very existence. This is known as availability bias, the more recent events are given more credibility even if evidence to the contrary exists.  An example would be people that they say they would never swim in the ocean after hearing of a shark attack, even though it is an extremely rare event when compared to things like being attacked by dogs. Sharks are certainly more deadly but you are far more likely to encounter a dog than a shark in your daily life.
+It can be said that statistics and probability is a statement about the future based on observations in the past. But risk is not a constant thing. People constantly alter their behavior based on observed or perceived dangers therefor altering future outcomes. Making past observations possibly moot if it based on an assumed pattern of behavior.  Donald Rumsfeld, former  Secretary of Defense talked about the three types of "knowns".  The first is the "known knowns", things that you know for certain.  The second is the "known unknowns", these are the things that you know you don't know but since you are aware of them they could be acquired through time, effort or other resources.  The third and most consequential is the "unknown unknowns", these are the things that you don't know you don't know - you are completely unaware of them in any way. This is the origins of Black Swans.  For if the factors that could lead to a Black Swan were known, the end user would have made adjustments to their behavior to account for them.  But instead the average person careens ahead attempting to mitigate and prevent the directly perceived more common risk factors that are seen on a regular basis, in the meantime just out of sight could be an event that end their very existence. This is known as availability bias, the more recent events are given more credibility even if evidence to the contrary exists.  An example would be people that they say they would never swim in the ocean after hearing of a shark attack, even though it is an extremely rare event when compared to things like being attacked by dogs. Sharks are certainly more deadly but you are far more encounters with dogs than sharks in your daily life increasing the probability of being attacked the former rather than the later. Yet the later is perceived to be the bigger threat to one's life.
   
-# You Make the Call
+# You Make the Call {-}
 There used to be a commercial that played during NFL games where they would show footage of an unusual play from an NFL game and then ask the audience, "You make the call". In this exercise you are handed the following data and are asked what is the likely worst case scenario for loss ratios for the next year. What would you say? Hopefully you know enough that the average is too optimistic and the worst data point on record is probably too pessimistic. You could assume the data is normally distributed and that 95% of the population lies approximately 2 standard deviations from the mean.  So you make your worst case prediction, a ratio of 67. After all, the entire 23 years of data is less than 50 with the exception of one outlier year and 75% of the data is 12 or less.  Seems like a solid prediction to the engineer.
 
-```{r insurance losses, fig.cap="Figure 2: Insurance Losses"}
+```{r insurance-loss, fig.cap= "Insurance Losses"}
 
-eq_insurance <- read.csv("C:/Users/Joel/OneDrive/Analysis/EVT/earthquake_loss.csv")
+eq_insurance <- read.csv("earthquake_loss.csv")
 
 eq_insurance %>% 
   filter(year!=1994) %>%  
@@ -108,7 +113,7 @@ ggplot(aes(year, loss_ratio))+
   geom_bar(stat = "identity", 
            fill='steelblue2',
            col='black')+
-  theme_bw(14, "serif")+
+  # theme_bw(14, "serif")+
   scale_y_continuous(breaks=seq(0,140,by=20))+
   labs(title = "Earthquake Insurance Loss Ratios by Year",
        subtitle = "1971 - 1993", 
@@ -116,43 +121,60 @@ ggplot(aes(year, loss_ratio))+
        y="Loss Ratio")
 ```
   
-The conclusion of this is that in 1994 the Northridge Earthquake hit with a loss ratio of 2273, almost 700 times the median loss ratio of the previous twenty-three years.  Even if someone was to assume worst case was the mean plus three standard deviations, which under a normal distribution covers 99.7% of the data they would have still been off by a factor of more than 20.  It can be seen from this example that catastrophic risk does not follow statistical norms. But in the field of risk, a Black Swan can be a hundred or a thousand times the mean.  This means that the results have the ability to increase exponentially and are not bound by the artificial constraints of a statistical distribution.
+The conclusion of this exercise is that in 1994 the Northridge Earthquake hit with a loss ratio of 2273, almost 700 times the median loss ratio of the previous twenty-three years.  Even if someone was to assume worst case was the mean plus three standard deviations, which under a normal distribution assumption would cover 99.7% of the data, they would have still been off by a factor of more than 20.  It can be seen from this example that catastrophic risk does not follow statistical norms. But in the field of risk, the consequences have the ability to increase exponentially and are not bound by the artificial constraints of a normal distribution.
   
-Consequently, even analysis methods like a Monte Carlo even though they account for stochastic nature of different variables, are better at predicting average behavior of something than the extremes. This is because the sampling distributions used are more suited to modeling the "typical" rather than the extremes, leading to "typical" results.
+Consequently even analysis methods like a Monte Carlo, though they account for stochastic nature of different variables, are better at predicting average behavior of something than the extremes. This is because the sampling distributions used are more suited to modeling the "typical" rather than the extremes, leading to "typical" results.
 
-## Catastrophic Risk  
-While history is not always a good predictor of the future, that is all is available to mine for data. Caveat: the shorter your window of observation the more likely it will be exceeded and in a shorter amount of time.  In the case of pipeline risk, PHMSA publishes incident data for jurisdictional pipelines.  An incident is an accidental release from a pipeline that includes any of the following: Greater than \$50,000 in property damage, an injury or fatality.  Then if you were to take that data and scale the injuries and fatalities to dollar values using an appropriate multiplier to arrive at a total consequence of failure (CoF), the data would have a histogram as shown in Figure 1.  Note: the range of data for the histogram extends out to $10^9$ on the logarithmic axis but for the purposes of scale it is truncated at $10^8$.
+## Catastrophic Risk  {-}
+While history is not always a good predictor of the future, history is what is available to mine for information  In the case of pipeline risk, PHMSA publishes incident data for jurisdictional pipelines.  An incident is an accidental release from a pipeline that includes any of the following: Greater than \$50,000 in property damage, an injury or fatality.  Then if you were to take that data and scale the injuries and fatalities to dollar values using an appropriate multiplier to arrive at a total consequence of failure (CoF), the data would have a histogram as shown in Figure 1.  Note: the range of data for the histogram extends out to $10^9$ on the logarithmic axis but for the purposes of scale it is truncated at $10^8$.
 
   
-```{r import data}
+```{r importdata}
 
-incidents <- read.csv("all_combine.csv") %>%
-  rename(CoF = COF) %>% 
-  filter(!is.na(CoF))
-#Per CPI calculator adjusted 1984 to 2019
+incidents <- read.csv("all_combine.csv") %>% 
+  tibble() %>% 
+  select(-X)
+  # rename(CoF = COF) %>% 
+  # filter(!is.na(CoF))
+
+#Max incidents per year
+maxi <- incidents %>% 
+  group_by(year) %>% 
+  summarise(maxi = max(CoF))
+
 ```
 
 ```{r incident-plot, fig.cap="CoF Data Density Curve"}
 incidents %>%
+  filter(str_detect(SYSTEM_TYPE, pattern = "GT"),
+         between(CoF, 1e6, 1e8)) %>%
   ggplot(aes(CoF)) +
   geom_histogram(fill = '#FF3030',
                  col = 'black',
                  alpha = 0.8) +
   geom_rug(col = 'blue') +
-  theme_bw() +
-  xlim(0, 1e8) +
-  ylim(0, 60) +
+  theme_bw(12, "serif") +
+  # xlim(0, 1e8) +
+  # ylim(0, 200) +
   labs(title = "Consequence of Failure",
        subtitle = "PHMSA Gas Transmission Incidents 1986 - 2020",
-       x = "CoF ($) - log Scale")
+       x = "CoF ($) - log Scale") +
+  theme(plot.margin = margin(
+    r = 0.7,
+    t = 0.6,
+    b = 0.5,
+    l = 0.5,
+    unit = "cm"
+  ))
 
 ```
 
-In the field of risk and in most naturally occurring phenomena such as floods and wind speeds, the majority of the data will almost always lie in a predictable range near the lower end of the scale but the incidents that should keep one up at night are the ones to the far right which are much rarer but the consequences can be larger than the anything seen in historical data.  In the CoF data in Figure \@ref(fig:incident-plot) the median incident is around \$170,000 and the maximum is over \$1 billion a difference of over 6,000 times. This is common in any application of risk, not just pipelines. There will be a plethora of data at the lower end of the scale with outliers extending out several magnitudes of order. But this concept is more than an academic exercise. The implications of this is seen in Figure \@ref(fig:incident-gt10M-plot) where 5% of all incidents make up 65% of the total consequences since 1986. Putting it another way, about 2 to 3 incidents a year account for about two-thirds of all consequences.  
+In the field of risk and in most meteorological phenomena such as floods and wind speeds, the majority of the data will almost always lie in a predictable range near the lower end of the scale but the incidents that should keep one up at night are the ones to the far right which are much rarer but the consequences can be larger than the anything seen in historical data.  In the CoF data in Figure \@ref(fig:incident-plot) the median incident is around \$170,000 and the maximum is over \$1 billion a difference of over 6,000 times. This is common in any application of risk, not just pipelines. There will be a plethora of data at the lower end of the scale with outliers extending out several magnitudes of order. But this concept is more than an academic exercise. The implications of this is seen in Figure \@ref(fig:incident-gt10M-plot) where 5% of all incidents make up 65% of the total consequences since 1986. Putting it another way, about 2 to 3 incidents a year account for about two-thirds of all consequences. 
   
 The costliest incident on record is obviously San Bruno but the second costliest is not Carlsbad as you would think.  It was an incident in a Class I location in rural east Texas. Don't assume that because a pipeline is in a rural location that it is immune from catastrophic consequences.  
   
 ```{r incident-gt10M-plot, fig.cap="Significant Incident Consequences", fig.width=6.5}
+
 incidents %>%
   filter(SIGNIFICANT == "YES" | SERIOUS == "YES") %>%
   ggplot() +
@@ -177,27 +199,27 @@ incidents %>%
     x = 1.5e6,
     y = 0.8,
     geom = "text",
-    label = "Incidents<$10MM:\n $1.80B\ Total CoF\n 95% of incidents = 35% of CoF",
+    label = "Incidents<$10MM:\n $2.1B\ Total CoF\n 95% of incidents = 35% of CoF",
     size = 3
   ) +
   annotate(
     x = 6.5e7,
     y = 0.8,
     geom = "text",
-    label = "Incidents>$10MM:\n$3.1B Total CoF\n5% of incidents = 65% of CoF",
+    label = "Incidents>$10MM:\n$3.6B Total CoF\n5% of incidents = 65% of CoF",
     size = 3
   )
 ```
   
-In a data set such as this, a distribution will often have the appearance of being a good fit through the middle of the curve with a few outliers at the higher end giving a false sense of security that future data points are accounted for. But if the tails area was magnified, you would see that there are far more of these extreme events than would be expected based on standard statistics. This is why most standard distributions are only a suitable model for such events that phenomena is based on sums and averages but a really poor model for Black Swans. Traditional statistics would predict the likelihood of something of the magnitude of these extreme consequence events to be effectively zero, yet there are several examples in the 35 years of data departing from this. This implies that there is something else outside of traditional statistics that describes these extremes. In fact the data count departs from the predicted count by a factor of 10 at the higher CoF values. The seemingly goodness of fit in the more prevalent lower end will often lead people to disregard the extreme events as so remote as not to be given serious consideration, much to their peril.  
+In a data set such as this, a distribution will often have the appearance of being a good fit to one of the standard distributions through the middle of the curve with a few outliers at the higher end giving a false sense of security that future data points are accounted for. But if the tails area was magnified, you would see that there are far more of these extreme events than would be expected based on the inferred probability. This is why most distributions are only a suitable model for such events where the phenomena is based on sums and averages but a really poor model for extreme events. If traditional statistics held up for extremes, 35 years of data would not be enough to experience anything like a San Bruno or even a Carlsbad yet there are several examples in the data departing from this likelihood. This implies that there is something else outside of traditional statistics that describes these extremes. In fact the data count departs from the predicted count by a factor of 10 at the higher CoF values. The seemingly goodness of fit in the more prevalent lower end will often lead people to disregard the extreme events as so remote as not to be given serious consideration, much to their peril.  
 
-# Extremes  
-The aim of statistical theory of extreme values is to explain the observed extremes arising in the samples of given sizes, or for a given period and to forecast extremes that may be expected to occur within a certain sample size, time, area, etc. There are two types of predictions that are can be made, one is the intensity of an event and the other is the frequency.  The frequency can be based on a set of observations or on a known period of return.  The founders of the calculus of probabilities were too occupied with the general behavior of statistical masses to be interested in the extremes. Nineteenth century mathematician Fourier stated that, for the normal distribution, the probability of an absolute deviation to exceed $3\sqrt 2$ times the standard deviation is about 1 in 50,000, and could therefore be neglected. From this small probability, the erroneous conclusion was drawn that about three times the standard deviation should be considered as the maximum for any statistical variable. The idea that three times the standard deviation should be considered as maximum-irrespective of the number of observations and of the distribution still prevails among most "practical" people. However, the fallacy of this rule is obvious. If the variable being studied is unlimited then the largest value is unlimited as well.  Emil Gumbel who did a considerable amount of the pioneering work on extreme value theory is quoted, "There will always be one (or more) value that will exceed all others."^[Les Valeurs Extrêmes des Distributions Statistiques', Annales de l'Institut Henri Poincaré (1935)] and the President's Water Commission (1950) stated that,"However big floods get, there will always be a bigger one coming; so says one theory of extremes, and experience suggests it is true." ^[President's Water Commission, 1950, p.141]
+# Extremes  {-}
+The aim of statistical theory of extreme values is to explain the observed extremes arising in the samples of given sizes, or for a given period and to forecast extremes that may be expected to occur within a certain sample size, time, area, etc. There are two types of predictions that are can be made, one is the intensity of an event and the other is the frequency.  The frequency can be based on a set of observations or on a known period of return.  Many incorrect assumptions about extremes have been carried forward for centuries, nineteenth century mathematician Fourier stated that, for the normal distribution, the probability of an absolute deviation to exceed $3\sqrt 2$ times the standard deviation is about 1 in 50,000, and could therefore be neglected. From this small probability, the erroneous conclusion was drawn that about three times the standard deviation should be considered as the maximum for any statistical variable. The idea that this assumption should be considered as maximum-irrespective of the number of observations and of the distribution still prevails among most "practical" people. However, the fallacy of this rule is obvious. If the variable being studied is unlimited then the largest value is unlimited as well.  Emil Gumbel who did a considerable amount of work on extreme value theory is quoted, "There will always be one (or more) value that will exceed all others."^[Les Valeurs Extrêmes des Distributions Statistiques', Annales de l'Institut Henri Poincaré (1935)] and the President's Water Commission (1950) stated that,"However big floods get, there will always be a bigger one coming; so says one theory of extremes, and experience suggests it is true." ^[President's Water Commission, 1950, Vol. 1, p.141]
   
-Fortunately this phenomena has been studied at length in areas such as floods and insurance risks. The first problem of the extremes to be discussed is when the available data is set of observations over a fixed period of time and the desire is to know the likelihood of exceeding the maximum observed value in some amount of time in the future. An example of this would be a data set of 50 years of rainfall and the engineer wants to know what the likelihood of exceeding the maximum observed amount in the next 30 years.
+Fortunately this phenomena has been studied at length in areas such as floods and insurance risks. The first problem of the extremes to be discussed is when the available data is set of observations over a fixed period of time and the desire is to know the likelihood of exceeding the maximum observed value in some amount of time in the future. An example of this would be 25 years of rainfall data is what is available and the engineer wants to know what the likelihood of exceeding the maximum observed amount in the next 50 years. 
 
-# The Law of Rare Exceedances 
-Often how frequent an extreme event is likely to occur on average is not known ahead of time and the designer only has a set of observations over some time period. The shorter the observation period the more likely the largest event observed will be exceeded in future observations and in a shorter amount of time. If the sample size is increased,the largest value observed will likewise increase. In this case, consider the *m*th (*m*=1,2, .. .,*n*) observations of any continuous random variable. We ask: In how many cases, *x*, will the past *m*th observation be equaled or exceeded in *N* future trials? The rank *m* is here counted from the top such that *m*=1 (*m*=*n*) stands for the largest (or smallest) observation. Therefore, the *m*th observation is the *m*th largest observation. The sample size *N* for which a forecast is wanted need not be identical with the past sample size *n*. The number of cases *x*, called the number of exceedances, is a new statistical variable having a distribution w(n,m,N,x) where *n*, *m*, *N* enter as parameters.
+# The Law of Rare Exceedances {-}
+Often, how frequent an extreme event is likely to occur on average is not known a priori and the designer only has a set of observations over a limited time period. But the drawback to relying on soley observed data is that the shorter the observation period, the more likely the largest event observed will be exceeded in future observations and in a shorter amount of time. As the sample size is increased,the largest value observed will likewise increase. But in the case of rare events it is impractical to wait for more data therefore a model has to be available that fits the observations as well as make reasonable predictions of the future. In this case, consider the $m^{th}$ (*m*=1,2, .. .,*n*) observations of any continuous random variable. We ask: In how many cases, *x*, will the past $m^{th}$ observation be equaled or exceeded in *N* future trials? The rank *m* is here counted from the top such that *m*=1 (*m*=*n*) stands for the largest (or smallest) observation. Therefore, the $m^{th}$ observation is the $m^{th}$ largest observation. The number of future years *N* for which a forecast is wanted need not be identical with the past sample size *n*. The number of cases *x*, called the number of exceedances, is a new statistical variable having a distribution w(n,m,N,x) where *n*, *m*, *N* enter as parameters.
 
 \begin{equation}
 w=\frac{\binom{n}{m}m\binom{N}{x}}{(N+n)\binom{N+n-1}{m+x-1}}
@@ -212,11 +234,16 @@ Where the factor inside the brackets, $\binom{n}{k}$ is the binomial coefficient
 (\#eq:binom)
 \end{equation}
 
-In most cases the engineer is only concerned with the likelihood of exceeding some design threshold once in a certain number of future years since it only takes one exceedance for a possible failure.  Therefore this example plot shows the probability of a single exceedance for *m*= 1, 2, 3 in 50 years based on a 30 year data history.  Not surprisingly, a $\frac{1}{30}$ year event has a maximum probability of occurring at year 30 and the second largest event is most likely at year 15.  But using this method, it now allows the designer to compute the likelihood for an arbitrary number of years in the future.  
+In most cases the engineer is only concerned with the likelihood of exceeding some design threshold once in a certain number of future years since it only takes one exceedance for a possible failure.  Therefore this example plot shows the probability of a single exceedance for *m*= 1, 2, 3 in 50 years based on a 30 year data history.  Not surprisingly, a 1 in 30 year event has a maximum probability of occurring at year 30 and the second largest event is most likely at year 15.  But using this method, it now allows the designer to calculate the likelihood for an arbitrary number of years in the future.  Figure \@ref(fig:POE) is the probability density of exceeding the $m^{th}$ largest event in Year $N$ based on $n$ years of observations. If you were to sum the area under each curve it would equal to one. Ususually the interest to the engineer is not the probability of it happening in a given year but at what point in future years is the cummulative probability exceed some threshold. It serves to reason that the longer the wait since the previous maximum event the more likely that the event will be exceeded in sooner rather than later going forward. This is shown in Figure \@ref(fig:cumprob) and is given by equation \@ref(eq:cumprobeq).
+
+\begin{equation}
+F(N,n,m) = 1-\frac{n!(N+n-m)!}{(N+n)!(n-m)!}
+(\#eq:cumprobeq)
+\end{equation}
   
 ```{r POE, fig.cap="Probability of Exceedance", fig.width=6.5}
 n = 30
-N = seq(1,50,by=1)
+N = 1:50
 x=1
 
 #probability of exceeding the m_th highest observations, x times in N future trials based on n observations in past
@@ -232,31 +259,70 @@ m <- 3
 pw3 <- sapply(N, w)
 pw3 <- unlist(pw3)
 
-pw <- data.frame(cbind(pw1, pw2, pw3))
+pw <- tibble(pw1, pw2, pw3) %>% pivot_longer(cols = pw1:pw3)
 
-pw <- reshape2::melt(pw)
+
 # pw <- pivot_longer(pw,cols = everything())
 
-pw$m <- c(rep(1,length(N)), rep(2,length(N)), rep(3,length(N)))
-pw$N <- rep(N,3)
+pw$m <- rep(1:3,length(N))
+pw$N <- rep(N, each = 3)
 
 
 pw %>%
   ggplot(aes(N, value)) +
   geom_line(aes(col = factor(m)),
             lwd = 1) +
-  theme_bw(12, "serif") +
+  # theme_bw(12, "serif") +
   labs(
-    title = "Probability of 1 Exceedance in N Future Years",
+    title = "Probability of 1 Exceedance at N Future Years",
     subtitle = "Based on 30 Years Observed Data",
     y = "Probability",
-    color = "Event Ranking"
+    color = "Ranking"
   )
 
 ```
-  
-# Return Period  
-Related to the probability of exceedance is the return period.  The return period is the average or estimated average time between events. This does not preclude the possibility of a 100 year event happening in two consecutive years (doesn't preclude but still very unlikely). The probability shown in Figure \@ref(fig:POE) of an event happening in a given year is not constant but dependent on the number of years since it occurred.  For instance the probability of once per 100 year event in a given year is not $\frac{1}{100}$ every year but is dependent on the number of years since that last occurred. If the actual return period is known such as a 100 year flood example, then the *average* probability over all the years is $p=0.01$ but this is not that useful for any risk estimate as the probability changes each year from the last event.  But if it was desired to know the probability of it occurring for the *first* time during year *t* then the geometric distribution will give that answer. When considering the issue of a design capacity and wanting to know the probability of exceeding it during the design life, then *t* is the desired design life.
+
+```{r cumprob, fig.cap="Cummulative Probability of Exceedance", fig.width=6.5}
+
+N <- rep(1:100,3)
+n <- rep(c(10,20,30), each=100)
+m <- 1
+
+# For exceedance once of m ---------------------------------------------
+a <- function(N,n){
+  1-factorial(n)*factorial(N+n-m)/(factorial(N+n)*factorial(n-m))
+  }
+
+exced <- tibble(N,n) %>% mutate(a = a(N,n))
+
+exced %>%
+  filter(a < 1) %>%
+  ggplot(aes(N, a)) +
+  geom_line(aes(col = factor(n))) +
+  labs(
+    title = "Cummulative Probability",
+    subtitle = "of Exceeding Max Observation in N Future Years",
+    x = "Future Years",
+    y = "Probability of Exceedance",
+    color = "Years of\nObservaions"
+  ) +
+  scale_x_continuous(breaks = scales::pretty_breaks())
+
+# For exceedance twice of m ---------------------------------------------
+
+a1 <-
+  1 - (factorial(n) * factorial(N + n - m) /
+         (factorial(N + n) * factorial(n - m))) *
+  ((N + n - m + N * m) / (N + n - m))
+
+
+
+
+```
+
+
+# Return Period  {-}
+Related to the probability of exceedance is the return period.  The return period is the average or estimated average time between events. This does not preclude the possibility of a 100 year event happening in two consecutive years (doesn't preclude but still very unlikely). The probability shown in Figure \@ref(fig:cumprob) of an event happening in a given year is not constant but dependent on the number of years since it occurred.  For instance the probability of once per 100 year event in a given year is not 1/100 every year but is dependent on the number of years since that last occurred. If the actual return period is known such as a 100 year flood for example, then the *average* probability over all the years is $p=0.01$ but this is not that useful for any risk estimate as the probability changes each year from the last event.  But if it was desired to know the probability of it occurring for the *first* time during year *t* then the geometric distribution will give that answer. When considering the issue of a design capacity and wanting to know the probability of exceeding it during the design life, then *t* is the desired design life.
 
 \begin{equation}
 P_t=p(1-p)^{t-1}\quad t=1,2,... (\#eq:POE)
@@ -268,25 +334,24 @@ Sometimes the issue is the likelihood of exceeding that threshold in any one yea
 \sum_{t=1}^{t}p(1-p)^{t-1} (\#eq:POESum)
 \end{equation}
 
-# Intensity Prediction  
-Even though the probabilities are small, the consequences can be significant.  This is what Gumbel referred to as the," Nuisance of Extreme Observations." Since the mean and dispersion of a distribution are considerably influenced by the extremes, a single observation can have significant impact on the interpretation of the observation. It begs questions such as, whether that observation comes from the same population as the rest, or is the observation is simply a bad reading due to human or instrument error or has the population undergone some sort of change? Criteria to interpret the validity of these readings was the motivation of the development of Extreme Value Theory (EVT). In the absence of EVT, engineers were forced to throw large (and costly) safety factors into designs to account for that uncertainty. While safety factors always need to be proportional to the magnitude of the uncertainty but it is not beneficial from a cost or risk standpoint to use excessive safety factors as a substitute for engineering.
+# Intensity Prediction  {-}
+Even though the probabilities are small, the consequences are large.  This is what is referred to as the," Nuisance of Extreme Observations." Since the mean and dispersion of a distribution are considerably influenced by the extremes, a single observation can have significant impact on the interpretation of the observation. It begs questions such as, whether that observation comes from the same population as the rest, or is the observation is simply a bad reading or has the population undergone some sort of change. Criteria to interpret the validity of these readings was the motivation of the development of Extreme Value Theory (EVT). In the absence of EVT, engineers were forced to throw large (and costly) safety factors into designs to account for that uncertainty, leading to the phrase, "ehn in doubt build it stout.". While safety factors always need to be proportional to the magnitude of the uncertainty, it is not beneficial from a cost or risk standpoint to use excessive safety factors as a substitute for engineering.
   
-# Prediction of Extreme Events
+# Prediction of Extreme Events {-}
 Black Swans occur without warning and have their origins in "unknown unknowns" therefore their time and place of happening are not predictable. Though the time and place are not predictable, there are methods that allow us to peek into the likelihood of an event of a certain size. This a well known realm of study in the area of floods and Insurance losses to name a few. If a dam was being designed the engineer needs to have some sort of idea how large a flood it would have to contain, even though the historical data might not contain something of that magnitude. Things such as this were the impetus to develop methods that are capable of extrapolating probable future extremes from data that may not contain them.
   
 To be able to accommodate the design of things such as dams against historical floods or skyscrapers against probable wind loads the theory of extreme distributions was developed.  This separate branch of statistics deals the probability of rare and extreme events. As the name implies it is only concerned about the far right or left-tailed events. There are two ways of examining these types of events with the GEVD, one is the peak over threshold and the block maxima. In the peak over threshold method the designer is only concerned with the data points over a certain threshold regardless of when they happened. In the block maxima approach only the maximum value for each time period (block) is considered, for example the maximum rainfall recorded each year for 20 years. 
   
 ```{r PHMSA GEVD}
-library(extRemes)
 
 inc_10m <- filter(incidents, CoF>1e7)
-fit_PHMSA <- fevd(inc_10m$CoF)
-q_phmsa <- qevd(c(0.975), fit_PHMSA$results$par[1],fit_PHMSA$results$par[2],fit_PHMSA$results$par[3])/1e6
-p_SB <- pevd(max(incidents$CoF), fit_PHMSA$results$par[1],fit_PHMSA$results$par[2],fit_PHMSA$results$par[3])
+fit_PHMSA <- fevd(x = log10(incidents$CoF),threshold = 7,)
+q_phmsa <- qevd(c(0.975), fit_PHMSA$results$par[1],fit_PHMSA$results$par[2],fit_PHMSA$results$par[3])
+
+p_SB <- pevd(max(log10(incidents$CoF)), fit_PHMSA$results$par[1],fit_PHMSA$results$par[2],fit_PHMSA$results$par[3])
 ```
   
-# Extreme Value Distribution
-  
+# Extreme Value Distribution {-}
 The generalized extreme value distribution (GEVD) is made of three different but related distributions that combines the Gumbel, Fréchet and Weibull distributions (type I, II, & III respectively) into one family of distributions. There are three factors that govern the shape of the distribution the location,$\mu$, the scale $\sigma$ and the shape, $\xi$.  The location is the mean of the distribution, the scale is a measure of the dispersion, similar to a standard deviation and the shape yields the type of extreme value distributions. When fitting the GEV to data, the sign of the shape parameter $\xi$ will indicate which of the three models describes the random process that generated the data. The three cases are $\xi=0$, $\xi>0$ and $\xi<0$ for the Gumbel, Fréchet and Weibull distributions.  The Weibull distribution of the GEV is often referred to as the "reverse" Weibull since it is bounded on the upper end and skewed left.  The most common is the Gumbel which is used to model upper extremes that are bounded on the left and skewed right. The distribution density of the GEVD is defined by the following equation.  Figure \@ref(fig:GEVplot) is the density of these are plotted for three different cases for the distribution discussed previously.
   
 \begin{equation}
@@ -303,7 +368,7 @@ Where $s$ is the standardized variable
 s=\frac{x-\mu}{\sigma} (\#eq:stdvar) 
 \end{equation}
   
-```{r GEVplot, fig.cap="GEV Shapes"}
+```{r GEVplot, fig.cap="GEV Shapes", fig.width = 5, fig.asp=2/3}
 
 points <- data.frame(x=c(-2,2),y=c(0,0))
 
@@ -372,7 +437,7 @@ ggplot(x, aes(x)) +
 
 ```
   
-If a extreme value distribution is fit to the PHMSA, incident data using a threshold of \$10 million, the far right tail of the 95% prediction interval (97.5 percentile) would be at about \$900 million which is within 11% of the CoF of San Bruno. Using the same model, it would place San Bruno at almost the 98 percentile, implying that there is a slightly greater than 2% chance of San Bruno being exceeded in the future. This is congruent with the quotes from Emil Gumbel, "There will always be one (or more) value that will exceed all others." [^1] and "It is impossible that the improbable never happens".^[Gumbel, E. (1958) Statistics of Extremes, Columbia University Press, New York, USA]
+If a extreme value distribution is fit to the PHMSA, incident data using a threshold of \$10 million, the far right tail of the 95% prediction interval (97.5 percentile) would be at about \$900 million which is within 11% of the CoF of San Bruno. Using the same model, it would place San Bruno at almost the 98th percentile, implying that there is a slightly greater than 2% chance of San Bruno being exceeded in the future. This is congruent with the quote from Emil Gumbel, "There will always be one (or more) value that will exceed all others." [^1] ^[Gumbel, E. (1958) Statistics of Extremes, Columbia University Press, New York, USA]
   
-# Conclusion  
-Even though there is theoretical backing to predicting the likely magnitude of extremes it still does not predict where or when they will occur. Because of this, it is important to have what can be termed as defense in depth. Meaning that there are enough redundant layers of protection between the ever-present hazard and an actual accident that any gap in a single layer does not give a pathway between the hazard and a potentially catastrophic accident.  These defensive barriers take the form of procedures, materials, maintenance and pipeline patrols to name a few.  The more redundant and diverse the barriers the less likely a Black Swan has any viability in your system. Above all else follow the Noah Rule: *Predicting rain does not count, building arks does.* As risk engineers we are called to not just be rain predictors but ark builders as well.
+# Conclusion  {-}
+Even though there is theoretical backing to predicting the likely magnitude of extremes, it still does not predict where or precisely when they will occur. Because of this, it is important to have what can be termed as defense in depth. Meaning that there are enough redundant layers of protection between the ever-present hazard and an actual accident that any gap in a single layer does not give a pathway between the hazard and a potentially catastrophic accident.  These defensive barriers take the form of procedures, materials, maintenance and pipeline patrols to name a few.  The more redundant and diverse the barriers the less likely a Black Swan has any viability in your system. Above all else follow the Noah Rule: *Predicting rain does not count, building arks does.* As risk engineers we are called to not just be rain predictors but ark builders as well.
