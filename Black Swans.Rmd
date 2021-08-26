@@ -3,7 +3,7 @@ title: "The Bird of Catastrophy"
 author: "Joel Anderson"  
 date: "`r format(Sys.time(), '%B %d, %Y')`" 
 
-output: bookdown::pdf_document2
+output: bookdown::word_document2
 ---
 
 ```{r setup, include=FALSE}
@@ -42,6 +42,7 @@ But more importantly, is that even though the samples are drawn at random from a
 library(locfit)
 library(logspline)
 library(patchwork)
+library(tinytex)
 library(tidyverse)
 library(extRemes)
 # library(infer)
@@ -233,28 +234,20 @@ Fortunately this phenomena has been studied at length in areas such as floods an
 
 Often, the true frequency of an extreme event is not known a priori and the engineer only has a set of observations over a limited time period. But the drawback to relying on solely observed data is that the shorter the observation period, the more likely the largest event observed will be exceeded in future observations and in a shorter amount of time. As the sample size is increased, the largest value observed will likewise increase. But in the case of rare events it is impractical to wait for more data, therefore a model has to be available that fits the observations as well as make reasonable predictions of the future. In this case, consider the $m^{th}$ (*m*=1,2, .. .,*n*) largest observations of any continuous random variable. We ask: In how many cases, *x*, will the past $m^{th}$ observation be equaled or exceeded in *N* future trials? The rank *m* is counted from the top such that *m*=1 (*m*=*n*) stands for the largest (or smallest) observation. Therefore, the $m^{th}$ observation is the $m^{th}$ largest observation. The number of future years *N* for which a forecast is wanted need not be identical with the past sample size *n*. The number of cases *x*, called the number of exceedances, is a new statistical variable having a distribution $w(n,m,N,x)$ where *n*, *m*, *N* enter as parameters.
 
-```{=tex}
-\begin{equation}
+$$
 w=\frac{\binom{n}{m}m\binom{N}{x}}{(N+n)\binom{N+n-1}{m+x-1}}
-(\#eq:POE)
-\end{equation}
-```
+$$
 Where the factor inside the brackets, $\binom{n}{k}$ is the binomial coefficient which represents the number of combinations that can be made from *n* items taken *k* at a time and where
-
-```{=tex}
-\begin{equation}
+$$
 \binom{n}{k} = \frac{n!}{k!(n-k)!}
-(\#eq:binom)
-\end{equation}
-```
+$$ 
+  
 In most cases the engineer is only concerned with the probability of exceeding some design threshold once in a certain number of future years since it only takes one exceedance for a possible failure. Therefore this example plot in Figure \@ref(fig:POE) shows the probability of a single exceedance for *m*= 1, 2, & 3 in 50 years based on a 30 year data history. Not surprisingly, a 1 in 30 year event has a maximum probability of occurring at year 30 and the second largest event is most likely at year 15. But using this method, it allows the designer to calculate the probability for an arbitrary number of years in the future. Figure \@ref(fig:POE) is the probability density of exceeding the $m^{th}$ largest event in Year $N$ based on $n$ years of observations. If the area under each curve was calculated it would equal to one, making it a true probability distribution not some ad-hoc rule-of-thumb. Unusually the interest to the engineer is not the probability of it happening in a given year but at what point in future years does the cumulative probability exceed some threshold. It serves to reason that the longer the wait since the previous maximum event the more likely that the event will be exceeded in sooner rather than later going forward. This is shown in Figure \@ref(fig:cumprob) and is given by equation \@ref(eq:cumprobeq).
 
-```{=tex}
-\begin{equation}
+$$
 F(N,n,m) = 1-\frac{n!(N+n-m)!}{(N+n)!(n-m)!}
-(\#eq:cumprobeq)
-\end{equation}
-```
+$$
+  
 ```{r POE_data}
 n = 30
 N = 1:50
@@ -341,19 +334,16 @@ a1 <-
 # Return Period {.unnumbered}
 
 Related to the probability of exceedance is the return period. The return period is the average or estimated average time between events. This does not preclude the possibility of a 100 year event happening in two consecutive years (doesn't preclude but still very unlikely). The probability shown in Figure \@ref(fig:cumprob) of an event happening in a given year is not constant but dependent on the number of years since it last occurred. For instance ,the probability of once per 100 year event in a given year is not 1/100 every year but is dependent on the number of years since that last occurred. If the actual return period is known such as a 100 year flood for example, then the *average* probability over all the years is $p=0.01$ but this is not that useful for any risk estimate as the probability changes each year since the last event. But if it was desired to know the probability of it occurring for the *first* time during year *t* then the geometric distribution shown in Equation \@ref(eq:POE) will give that answer. When considering the issue of a design capacity and wanting to know the probability of exceeding it at any time during the design life, then *t* is the desired design life.
-
-```{=tex}
-\begin{equation}
-P_t=p(1-p)^{t-1}\quad t=1,2,... (\#eq:POE)
-\end{equation}
-```
+$$
+P_t=p(1-p)^{t-1}\quad t=1,2,... 
+$$
+  
 Sometimes the issue is the probability of exceeding that threshold in any one year in a *t* year period. For that case it is the summation of the geometric probability from 1 to *t*.
 
-```{=tex}
-\begin{equation}
-\sum_{t=1}^{t}p(1-p)^{t-1} (\#eq:POESum)
-\end{equation}
-```
+$$
+\sum_{t=1}^{t}p(1-p)^{t-1}
+$$
+  
 # Intensity Prediction {.unnumbered}
 
 Even though the probabilities of the extremes are small, the consequences are large. This is what is referred to as the, "Nuisance of Extreme Observations." Since the mean and dispersion of a distribution are considerably influenced by the extremes, a single observation can have significant impact on the interpretation of the observation. When an extreme is observed, it generates such questions such as, whether that observation comes from the same population as the rest, or is the observation is simply a bad reading or has the population undergone some sort of change. Criteria to interpret the validity of these readings was the motivation of the development of Extreme Value Theory (EVT). In the absence of EVT, engineers were forced to throw large (and costly) safety factors into designs to account for that uncertainty, leading to the phrase, "when in doubt build it stout.". While safety factors always need to be proportional to the magnitude of the uncertainty, it is not beneficial from a cost or risk standpoint to use excessive safety factors as a substitute for engineering.
@@ -376,22 +366,20 @@ p_SB <- pevd(max(log10(incidents$CoF)), fit_PHMSA$results$par[1],fit_PHMSA$resul
 # Extreme Value Distribution {.unnumbered}
 
 The generalized extreme value distribution (GEVD) is made of three different but related distributions that combines the Gumbel, Fréchet and Weibull distributions (type I, II, & III respectively) into one family of distributions. There are three factors that govern the shape of the distribution, the location $\mu$, the scale $\sigma$ and the shape, $\xi$. The location is the mean of the distribution, the scale is a measure of the dispersion, similar to a standard deviation and the shape yields the type of extreme value distributions. When fitting the GEVD to data, the sign of the shape parameter $\xi$ will indicate which of the three models describes the random process that generated the data. The three cases are $\xi=0$, $\xi>0$ and $\xi<0$ for the Gumbel, Fréchet and Weibull distributions. The Weibull distribution of the GEV is often referred to as the "reverse" Weibull since it is bounded on the upper end and skewed left. The most common is the Gumbel which is used to model upper extremes that are bounded on the left and skewed right. The distribution density of the GEVD is defined by Equation \@ref(eq:GEVeq). In Figure \@ref(fig:GEVplot) the density of these are plotted for three different cases for the distribution discussed previously.
+$$
+f(s;\xi) =
+\begin{cases}
+(1+\xi s)^{\frac{-1}{\xi}-1}exp(-(1+\xi s)^{-1/\xi})\qquad &\xi\neq 0 \\
+exp(-s)exp(-exp(-s)) \qquad &\xi=0
+\end{cases}
+$$
 
-```{=tex}
-\begin{equation}
-f(s;\xi) =\Bigg\{
-(1+\xi s)^{\frac{-1}{\xi}-1}exp(-(1+\xi s)^{-1/\xi})\qquad \xi\neq 0 \\ 
-exp(-s)exp(-exp(-s)) \qquad \xi=0 
-(\#eq:GEVeq)
-\end{equation}
-```
 Where $s$ is the standardized variable
 
-```{=tex}
-\begin{equation}
-s=\frac{x-\mu}{\sigma} (\#eq:stdvar) 
-\end{equation}
-```
+$$
+s=\frac{x-\mu}{\sigma}
+$$
+  
 ```{r GEVplot, fig.cap="GEV Shapes", fig.asp=2/3}
 
 points <- data.frame(x=c(-2,2),y=c(0,0))
