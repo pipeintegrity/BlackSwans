@@ -23,12 +23,12 @@ library(car)
 setwd("E:/Documents/Analysis/catastrophic")
 #setwd("~/PPIM2019")
 incidents <- fread("all_combine.csv")
-incidents <- incidents[is.na(Year)==FALSE]
+incidents <- incidents %>% filter(!is.na(year))
 #incidents <- incidents[1:2716,] #Drop 40 NAs at the end
 #incidents <- incidents %>% filter(is.na(Year)==FALSE)
-incidents[,inflation_adjstd :=incidents$TOTAL_COST_IN84*2.49] #Per CPI calculator adjusted 1984 to 2019
-incidents[, CoF:=inflation_adjstd+INJURE*0.33*10e6+FATAL*10e6]
-incidents <- incidents[is.na(CoF)==FALSE]
+# incidents <- incidents %>% mutate(inflation_adjstd = TOTAL_COST_IN84*2.49) #Per CPI calculator adjusted 1984 to 2019
+incidents <- incidents %>% mutate(CoF =TOTAL_COST_CURRENT+INJURE*1/3*10.6e6+FATAL*10.6e6)
+incidents <- incidents %>% filter(!is.na(CoF))
 
 ggplot(incidents, aes(CoF))+geom_density(fill='#FF3030', col='black', alpha=0.8)+theme_bw()+xlim(0,5e6)#+scale_x_log10()
 
