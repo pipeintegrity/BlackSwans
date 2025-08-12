@@ -1,0 +1,260 @@
+---
+title: "Probability of Exceedance of Extremes"
+author: "Joel Anderson"
+date: "6/12/2020"
+output:
+  html_document:
+    theme: journal
+    toc: true 
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+## Extremes
+
+The aim of statistical theory of extreme values is to explain the observed extremes arising in the samples of given sizes, or for a given period and to forecast extremes that may be expected to occur within a certain sample size, time, area, etc. There are two types of predictions that are can be made, one is the intensity of an event and the other is the frequency.  The frequency can be based on a set of observations or on a known period of return.  The founders of the calculus of probabilities were too occupied with the general behavior of statistical masses to be interested in the extremes. Nineteenth century mathematician Fourier stated that, for the normal distribution, the probability of an absolute deviation to exceed $3\sqrt 2$ times the standard deviation is about 1 in 50,000, and could therefore be neglected. From this small probability, the erroneous conclusion was drawn that about three times the standard deviation should be considered as the maximum for any statistical variable. The idea that three times the standard deviation should be considered as maximum-irrespective of the number of observations and of the distribution-still prevails among most "practical" people. However the fallacy of this rule is obvious. If the variable being studied is unlimited then the largest value is unlimited as well.  Emil Gumbel who did a lot of the pioneering work on extreme value theory is quoted, "There will always be one (or more) value that will exceed all others." and the President's Water Commission stated that,"However big floods get, there will always be a bigger one coming; so says one theory of extremes, and experience suggests it is true."
+
+## The Law of Rare Exceedances 
+  
+Often how frequent an extreme event is likely to occur on average is not known ahead of time and the designer only has a set of observations over some time period. The shorter the observation period the more likely the largest event observed will be exceeded in future observations and in a shorter amount of time. If the sample size is increased,the largest value observed will likewise increase. In this case, consider the *m*th (*m*=1,2, .. .,*n*) observations of any continuous random variable. We ask: In how many cases, *x*, will the past *m*th observation be equaled or exceeded in *N* future trials? The rank *m* is here counted from the top such that *m*=1 (*m*=*n*) stands for the largest (smallest) observation. Therefore, the *m*th observation is the *m*th largest observation. The sample size *N* for which a forecast is wanted need not be identical with the past sample size *n*. The number of cases *x*, called the number of exceedances, is a new statistical variable having a distribution w(n,m,N,x) where *n*, *m*, *N* enter as parameters.
+
+$$w=\frac{\binom{n}{m}m\binom{N}{x}}{(N+n)\binom{N+n-1}{m+x-1}}$$
+Where the factor inside the brackets, $\binom{n}{k}$ is the binomial coefficient which represents the number of combinations that can be made from *n* items taken *k* at a time and where
+
+$$\binom{n}{k} = \frac{n!}{k!(n-k)!}$$
+In most cases the engineer is only concerned with the likelihood of exceeding some design threshold once in a certain number of future years since it only takes one exceedance for a possible failure.  Therefore this example plot shows the probability of a single exceedance for *m*= 1, 2, 3 in 50 years based on a 30 year data history.  Not surprisingly, a $\frac{1}{30}$ year event has a maximum probability of occurring at year 30 and the second largest event is most likely at year 15.  But using this method it now allows the end user to compute the likelihood for an arbitrary number of years in the future.  
+  
+```{r POE, fig.cap="Figure 1"}
+library(tidyverse)
+# library(scales)
+# library(reshape2)
+
+n <- 30
+N <- 1:50
+x <- 1
+m <- 1:3
+
+# Define the function for w using 'choose' for combinations
+# w = probability of exceeding the m_th highest observations, x times in N
+# future trials based on n observations in past
+
+w <- function(N_val, m_val, x_val, n_val) {
+  # Calculate the terms using choose()
+  term_n_m <- choose(n_val, m_val)
+  term_N_x <- choose(N_val, x_val)
+  term_denominator_choose <- choose(N_val + n_val - 1, m_val + x_val - 1)
+  
+  # Check for conditions where combinations might be invalid or lead to division
+  # by zero. choose(a, b) returns 0 if a < b, which is generally handled.
+  # However, if the denominator choose term is exactly 0, we must handle it to
+  # avoid Inf/NaN.
+  
+  if (term_denominator_choose == 0) {
+    return(NA_real_) # Return NA_real_ for numerical NA
+  }
+  
+  # Calculate w based on the formula
+  result <- (term_n_m * m_val * term_N_x) / ((N_val + n_val) * term_denominator_choose)
+  return(result)
+}
+
+# Create a data frame of all combinations using expand_grid
+# Then calculate 'w' for each row using dplyr::mutate and purrr::pmap_dbl
+results_df_tidyverse <- expand_grid(N = N, m = m, n = n, x = x) %>%
+  mutate(
+    # pmap_dbl applies the 'w' function row-wise, taking arguments from the specified columns
+    w = pmap_dbl(list(N_val = N, m_val = m, x_val = x, n_val = n), w)
+  )
+
+# Define the function for w using 'choose' for combinations
+w <- function(N_val, m_val, x_val, n_val) {
+  term_n_m <- choose(n_val, m_val)
+  term_N_x <- choose(N_val, x_val)
+  term_denominator_choose <- choose(N_val + n_val - 1, m_val + x_val - 1)
+  
+  if (term_denominator_choose == 0) {
+    return(NA_real_)
+  }
+  
+  result <- (term_n_m * m_val * term_N_x) / ((N_val + n_val) * term_denominator_choose)
+  return(result)
+}
+
+# Create a data frame of all combinations using expand_grid
+results_df <- expand_grid(N = N, m = m, n = n, x = x) %>%
+  mutate(
+    w = pmap_dbl(list(N_val = N, m_val = m, x_val = x, n_val = n), w)
+  )
+
+# Create the line plot
+ggplot(results_df, aes(x = N, y = w, color = factor(m))) +
+  geom_line(linewidth = 1) + # Add line segments
+  # geom_point(size = 2, alpha = 0.8) + # Add points for each data point
+  labs(
+    title = " Probability of Excedance vs. Number of Future Trials (N)",
+    x = "Number of Future Trials (N)",
+    y = "Probability (w)",
+    color = latex2exp::TeX("$m^{th}\\,Highest\\,Obs.$"),
+    caption = "Based on 30 Observations"
+      # Label the legend for 'm'
+  ) +
+  theme_minimal(14) + # A clean theme
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold"), # Center and bold the title
+    legend.position = "right" # Position the legend
+  ) +
+  scale_color_viridis_d() # Use a colorblind-friendly discrete color palette
+
+```
+  
+## Pipeline Incidents  
+
+Figure 2 is the maximum Consequence of Failure (CoF) per year between 1986 and 2019. It is evident that 2010 was the worst year on record far exceeding others. The second worst one is 2000. So if a risk engineer in in 2000 was looking at the data and wanted to know the probability of having an incident that exceeds it in a given number of years in the future, this same analysis could be applied. Assuming the available data in 2000 was back to 1986 there would of been 15 years of data to review, including the year 2000 itself. So what is the probability that there would be an exceedance in 10 years?  The results are shown in Figure 3.  Intuitively the maximum likelihood would be in 15 years but if the curve is examined at year 10 it is seen that it is asymptotic and there is not much difference between year 10 and 15.  At year 10 the probability density is 0.250 and by year 15 it has only increased to 0.259.  So what is the likelihood that Carlsbad is exceeded a second time?  If you look at Figure 3 and follow the x=2 line becomes almost asymptotic in the range of 20 to 20 years, especially between 25 and 30 years.  With 20 years elapsed since Carlsbad the greatest risk of exceeding Carlsbad again is in the next 10 years and the likelihood of it being more than 10 years for an exceedance goes down from there.
+  
+```{r max cof, fig.cap="Figure 2"}
+all_combine <- read_csv("C:/Users/Joel/OneDrive/Analysis/PPIM2019/all_combine.csv")
+maxcof <- all_combine %>% 
+  group_by(Year) %>% 
+  summarise(maxcof=max(CoF, na.rm=T)/1e6) %>% 
+  arrange(-Year)
+
+
+maxcof %>% ggplot(aes(Year, maxcof)) +
+  geom_col(fill = "coral2") +
+  theme_bw(14, "serif") +
+  labs(title = "CoF for Gas Transmission Incidents", 
+       subtitle = "Max CoF by Year 1986 - 2019", 
+       y = "Annual Max. CoF ($MM)")
+
+```
+
+```{r POE CoF, fig.cap="Figure 3"}
+## looking at just m=1
+n = 15
+N = seq(2,30,by=1)
+x=1
+
+#probability of exceeding the m_th highest observations, x times in N future trials based on n observations in past
+w =function(N) ncol(combn(n,m))*m*ncol(combn(N,x))/((N + n)*ncol(combn(N+n-1,m+x-1)))
+# df <- data.frame(N)
+# df$w = ncol(combn(n,m))*m*ncol(combn(N,x))/((N + n)*ncol(combn(N+n-1,m+x-1)))
+m <- 1
+pw1 <- sapply(N, w)
+pw1 <- unlist(pw1)
+
+x=2
+pw2 <- sapply(N, w)
+pw2 <- unlist(pw2)
+
+pw <- data.frame(pw1, pw2,N)
+pw <- reshape2::melt(pw,id.vars = 'N')
+
+pw <- pw %>% mutate(x=c(rep(1,max(N)-1),rep(2,max(N)-1)))
+
+pw %>% ggplot(aes(N, value))+
+  geom_line(aes(col=factor(x)),lwd=1)+
+  theme_bw(14,"serif")+
+  labs(title = "Probability of Exceedances in N Future Years",
+       subtitle = paste("Based on",n, "Years Observed Data"),
+       y="Probability Density", color="x")+theme(legend.position = c(0.8,0.25))+
+  scale_x_continuous(breaks = scales::pretty_breaks())+scale_y_continuous(breaks = scales::pretty_breaks())
+```
+
+The term $\bar{x}_m$ is the average number of exceedances over the *m*th largest value in *N* future trials (or years if dealing with things like floods, etc. that occur at annual frequencies) is:
+
+$$\bar{x}_m= m \frac{N}{n+1}$$
+Suppose we wanted to turn this problem around and rather than quantifying the likelihood of *x* exceedances over the *m*th value in a *N* future trials, we wanted to know how many trials need to be made before there is a given probability $\alpha_1$ for the *m*th largest value to be exceeded at least once? N can't be solved directly, like most probability distributions.  *N* is obtained as the solution that it satisfies this equation.  
+
+$$\frac{n!(N+n-m)!}{(N+n)!(n-m)!}=1-\alpha_1$$
+
+  
+## Return Period  
+  
+Interesting to note that the probability shown in Figure 1 of an event happening in a given year is not constant but dependent on the number of years since it occurred.  For instance the probability of a 1 in a 100 year event in a given year is not $\frac{1}{100}$ every year but is dependent on the number of years since that last occurred. This is known as the "return period" or the average number of years between occurrences.  The key word being "average" this does not preclude the possibility of a 100 year event happening two consecutive years (doesn't preclude but still very unlikely). If the actual return period is known such as a 100 year flood example then the probability for in any one year is obviously $p=0.01$.  But if it was desired to know the probability of it occurring for the *first* time during year *t* then the geometric distribution will give that answer. When considering the issue of a design life and wanting to know the probability of exceeding it during the design life, then *t* is the desired design life.
+$$P_t=p(1-p)^{t-1}\qquad t=1,2,...$$
+For the probability that it exceeding in any one year in a *t* year period is simply the binomial distribution. Which describes the likelihood of an event occurring a specified number of times given an probability of "success" for each trial assuming each trial is independent of the other.
+$$P_x(x=1)=\binom {t}{1}p(1-p)^{t-1}$$
+Sometimes the issue at hand is what is the likelihood of exceeding that threshold in any one year in a *t* year period. For that case it is the summation of the geometric probability from 1 to *t*.
+$$\sum_{t=1}^{t}p(1-p)^{t-1}$$
+  
+## Intensity Prediction  
+  
+An extreme value is a observation that is either very large or very small, far out on the tails of a probability distribution. Even though the probabilities are small, the consequences can be significant. Distributions like the Normal Distribution work very well when the area of interest is not far from the mean but when dealing with extreme events far out on the tails of the distribution things like the normal distribution grossly under-predict the magnitude or the likelihood of an extreme event due to the asymptotic behavior of the distribution.  This is what Gumbel referred to as the," Nuisance of Extreme Observations." Since the mean and dispersion of a distribution are considerably influenced by the extremes, a single observation can have significant impact on the interpretation of the observation. It begs questions such as, whether that observation comes from the same population as the rest, is the observation is simply a bad reading due to human or instrument error or has the population undergone some sort of change? Criteria to interpret the validity of these readings was the motivation of the development of Extreme Value Theory (EVT). In the absence of EVT, engineers were forced to throw large (and costly) safety factors into designs to account for that uncertainty. 
+  
+```{r distribution tails, fig.height=3, fig.width=4}
+x <- seq(-4,4,length.out = 301)
+x <- data.frame(x)
+
+ggplot(x , aes(x)) +
+  stat_function(
+    fun = dnorm,
+    geom = "area",
+    fill = "steelblue",
+    alpha = .25,
+    n=301
+  ) +
+  stat_function(
+    fun = dnorm,
+    geom = "area",
+    fill = "steelblue",
+    xlim = c(qnorm(.975), 4)
+  )+
+  stat_function(
+    fun = dnorm,
+    geom = "area",
+    fill = "steelblue",
+    xlim = c(-4,qnorm(0.025))
+  )+
+  theme(axis.text.y = element_blank(), axis.ticks.y = element_blank())+
+  labs(x=NULL, y=NULL, title = "Distribution Tails")
+```
+  
+## Extreme Value Distribution
+  
+The generalized extreme value distribution (GEV) is made of three different but related distributions that combines the Gumbel, Fréchet and Weibull distributions (type I, II, & III respectively) into one family of distributions. There are three factors that govern the shape of the distribution the location,$\mu$, the scale $\sigma$ and the shape, $\xi$.  The location is the mean of the distribution, the scale is a measure of the dispersion, similar to a standard deviation and the shape yields the type of extreme value distributions. When fitting the GEV to data, the sign of the shape parameter $\xi$ will indicate which of the three models describes the random process that generated the data. The three cases are $\xi=0$, $\xi>0$ and $\xi<0$ for the Gumbel, Fréchet and Weibull distributions.  The Weibull distribution of the GEV is often referred to as the "reverse" Weibull since it is bounded on the upper end and skewed left.  The most common is the Gumbel which is used to model upper extremes that are bounded on the left and skewed right. The distribution density of the GEV is defined by the following equation.  Figure 4 is the density of these are plotted for three different cases for the distribution discussed previously.
+  
+$$f(s;\xi)=\bigg\{\begin{align*} 
+(1+\xi s)^{\frac{-1}{\xi}-1}exp(-(1+\xi s)^{-1/\xi})\qquad \xi\neq 0 \\ 
+exp(-s)exp(-exp(-s)) \qquad \xi=0
+\end{align*}$$
+  
+Where $s$ is the standardized variable
+  
+$$s=\frac{x-\mu}{\sigma}$$
+  
+```{r GEV plot, fig.cap="Figure 4"}
+library(extRemes)
+points <- data.frame(x=c(-2,2),y=c(0,0))
+x <- data.frame(x=seq(-4,4,length.out = 301))
+ggplot(x, aes(x)) +
+  stat_function(
+    fun = devd, args =list(loc=0,scale=1,shape=-1/2)  ,
+    geom = "line",
+    col = "green",
+    n=301, xlim = c(-4,2),lwd=0.9
+  )+
+  stat_function(
+    fun = devd, args =list(loc=0,scale=1,shape=0)  ,
+    geom = "line",
+    col = "red",
+    n=301,lwd=0.9
+  )+
+  stat_function(
+    fun = devd, args =list(loc=0,scale=1,shape=1/2)  ,
+    geom = "line",
+    col = "blue",
+    n=301, xlim = c(-2,4),lwd=0.9
+  )+
+  geom_point(data=points,aes(x=x,y=y),col=c('blue','green'), shape=8, size=4)+
+  annotate(geom="text", x=-2,y=0.3, label=paste(expression(sigma),"==1","~\n ",expression(mu),"==0"), parse=TRUE, size=5)+
+  theme_bw()+
+  labs(title = "Generalized Extreme Value Densities", subtitle = "for various shape factors", y= "density",x="x", caption = "shape = -1/2, 0, +1/2 (green, red, blue)")
+
+```
+  
+## Conclusion  
+  
+In dealing with extremes the engineer should resist techniques that while computationally convenient (e.g. normal distribution), grossly underpredict the likelihood of extreme events and lead to negative surprises later on as well as applying overly conservative safety factors on designs. Given the methods shown above the engineer has the tools necessary to quantify not only the likelihood of the return of extreme events within a period of time or the magnitude of that return.
